@@ -58,11 +58,39 @@
             # keep-sorted end
           }
         );
+        runAs = name: script: {
+          type = "app";
+          program = script |> pkgs.writeShellScript name |> toString;
+        };
       in
       {
         formatter = treefmt.config.build.wrapper;
         checks = {
           formatting = treefmt.config.build.check self;
+        };
+        apps = {
+          check-action =
+            ''
+              set -e
+              ${pkgs.actionlint}/bin/actionlint --version
+              ${pkgs.actionlint}/bin/actionlint
+              ${pkgs.ghalint}/bin/ghalint --version
+              ${pkgs.ghalint}/bin/ghalint run
+            ''
+            |> runAs "check-action";
+          check-renovate-config =
+            ''
+              set -e
+              ${pkgs.renovate}/bin/renovate-config-validator renovate.json5
+            ''
+            |> runAs "check-renovate-config";
+          check-deno =
+            ''
+              set -e
+              ${pkgs.deno}/bin/deno task check
+              ${pkgs.deno}/bin/deno task lint
+            ''
+            |> runAs "check-deno";
         };
       }
     );
