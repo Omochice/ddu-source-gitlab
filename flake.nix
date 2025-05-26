@@ -38,6 +38,10 @@
             programs = {
               # keep-sorted start block=yes
               deno.enable = true;
+              formatjson5 = {
+                enable = true;
+                indent = 2;
+              };
               keep-sorted.enable = true;
               mdformat.enable = true;
               nixfmt.enable = true;
