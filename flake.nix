@@ -69,7 +69,7 @@
           formatting = treefmt.config.build.check self;
         };
         apps = {
-          check-action =
+          check-actions =
             ''
               set -e
               ${pkgs.actionlint}/bin/actionlint --version
@@ -77,7 +77,7 @@
               ${pkgs.ghalint}/bin/ghalint --version
               ${pkgs.ghalint}/bin/ghalint run
             ''
-            |> runAs "check-action";
+            |> runAs "check-actions";
           check-renovate-config =
             ''
               set -e
